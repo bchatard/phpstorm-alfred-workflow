@@ -5,11 +5,13 @@ Easily open your PhpStorm projects with Alfred2 workflow
 
 ## Requirements
 This workflow need PhpStorm command line tools to works:
+
 1. Open PhpStorm
 2. Go to "Tools" and "Create Command-line Launcher"
 3. In the popup windows, just click on OK
 
-If you change command line tools path, you need to update worflow.
+If you change command line tools path, you need to update worflow settings:
+
 1. Go to worklows list and select "PhpStorm: Open project"
 2. Double click on "Run Script" box
   * Click on "Open workflow folder"
@@ -25,8 +27,8 @@ If you change command line tools path, you need to update worflow.
 
 
 ## How to use
-Open Alfred with your usual hotkey
-Type keyword `pstorm` followed by your project name
+* Open Alfred with your usual hotkey
+* Type keyword `pstorm` followed by your project name
 
 
 ## Credits
