@@ -113,7 +113,7 @@ findProjects()
         for projectPath in "${projectsPath[@]}"; do
             projectName=$(extractProjectName ${projectPath})
             if [ -n "${projectName}" ] && [ "${projectName}" != "" ]; then
-                if [[ ${projectName} == *${QUERY}* ]]; then
+                if [[ ${projectName} == *${QUERY}* ]] || [[ -z "${QUERY}" ]]; then
                     addResult ${projectName} ${projectPath} ${projectName} ${projectPath} 'fileicon:/Applications/PhpStorm.app' 'yes' 'autocomplete'
                     ((nbProjet++))
                 fi
