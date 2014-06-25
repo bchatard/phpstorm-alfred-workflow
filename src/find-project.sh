@@ -7,8 +7,6 @@
 PHPSTORM_SCRIPT="/usr/local/bin/pstorm"
 # XPath to projects location in other.xml
 XPATH_PROJECTS="//component[@name='RecentDirectoryProjectsManager']/option[@name='names']/map/entry/@key"
-# XPath to project name in workspace.xml
-XPATH_PROJECT_NAME="//component[@name='FavoritesManager']/favorites_list/@name"
 # Current nocasematch status
 CURRENT_NOCASEMATCH='off'
 
@@ -69,9 +67,9 @@ getProjectsPath()
 # @return string
 extractProjectName()
 {
-    nameFile="$1/.idea/workspace.xml"
+    nameFile="$1/.idea/.name"
     if [ -r ${nameFile} ]; then
-        projectName=`xmllint --xpath ${XPATH_PROJECT_NAME} ${nameFile} | sed -e 's/name="//g' -e 's/^ *//g' -e 's/ *$//g' -e 's/"//g'`
+        projectName=`cat ${nameFile}`
         echo ${projectName}
     fi
 }
