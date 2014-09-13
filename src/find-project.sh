@@ -112,7 +112,7 @@ findProjects()
             projectName=$(extractProjectName ${projectPath})
             if [ -n "${projectName}" ] && [ "${projectName}" != "" ]; then
                 if [[ ${projectName} == *${QUERY}* ]] || [[ -z "${QUERY}" ]]; then
-                    addResult ${projectName} ${projectPath} ${projectName} ${projectPath} 'fileicon:/Applications/PhpStorm.app' 'yes' 'autocomplete'
+                    addResult ${projectName} ${projectPath} ${projectName} ${projectPath} 'fileicon:/Applications/PhpStorm.app' 'yes' ${projectName}
                     ((nbProjet++))
                 fi
             fi
@@ -120,10 +120,10 @@ findProjects()
 
         # if there is no project display information
         if [ ${nbProjet} -eq 0 ]; then
-            addResult 'none' '' "No project match '${QUERY}'" "No project match '${QUERY}'" 'fileicon:/Applications/PhpStorm.app' 'yes' 'autocomplete'
+            addResult 'none' '' "No project match '${QUERY}'" "No project match '${QUERY}'" 'fileicon:/Applications/PhpStorm.app' 'yes' ${QUERY}
         fi
     else
-        addResult 'none' '' "Can't find projects" "check configuration or contact developer" 'fileicon:/Applications/PhpStorm.app' 'yes' 'autocomplete'
+        addResult 'none' '' "Can't find projects" "check configuration or contact developer" 'fileicon:/Applications/PhpStorm.app' 'yes' ''
     fi
 
     # restore nocasematch value
