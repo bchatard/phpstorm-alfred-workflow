@@ -7,6 +7,7 @@
 PHPSTORM_SCRIPT="/usr/local/bin/pstorm"
 # XPath to projects location in other.xml
 XPATH_PROJECTS="//component[@name='RecentDirectoryProjectsManager']/option[@name='names']/map/entry/@key"
+XPATH_RECENT_PROJECTS="//component[@name='RecentDirectoryProjectsManager']/option[@name='recentPaths']/list/option/@value"
 # Current nocasematch status
 CURRENT_NOCASEMATCH='off'
 
@@ -54,7 +55,11 @@ getProjectsPath()
     otherOptions="${otherOptions}/options/other.xml"
     if [ -r ${otherOptions} ]; then
         escapedHome=`echo $HOME | sed -e 's/[/]/\\\\\//g'`
-        projects=`xmllint --xpath ${XPATH_PROJECTS} ${otherOptions} | sed -e 's/key=//g' -e 's/" "/;/g' -e 's/^ *//g' -e 's/ *$//g' -e 's/"//g' -e "s/[$]USER_HOME[$]/${escapedHome}/g"`
+        projects=`xmllint --xpath ${XPATH_PROJECTS} ${otherOptions} 2>/dev/null`
+        if [[ -z ${projects} ]]; then
+            projects=`xmllint --xpath ${XPATH_RECENT_PROJECTS} ${otherOptions}`
+        fi
+        projects=`echo ${projects} | sed -e 's/key=//g' -e 's/value=//g' -e 's/" "/;/g' -e 's/^ *//g' -e 's/ *$//g' -e 's/"//g' -e "s/[$]USER_HOME[$]/${escapedHome}/g"`
         echo ${projects}
     fi
 }
@@ -132,6 +137,6 @@ findProjects()
     getXMLResults
 }
 
-#findProjects $1 # test
+#getProjectsPath $1 # test
 
 IFS=${ORIG_IFS}
