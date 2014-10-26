@@ -11,9 +11,9 @@ This workflow need PhpStorm command line tools to works:
 3. In the popup windows, just click on OK
 
 ### Customisation
-If you change command line tools path, you need to update worflow settings:
+If you change command line tools path, you need to update workflow settings:
 
-1. Go to worklows list and select "PhpStorm: Open project"
+1. Go to Workflows and select "PhpStorm: Open project"
 2. Double click on "Run Script" box
   * Click on "Open workflow folder"
   * Edit `find-project.sh`, and change `PHPSTORM_SCRIPT` value.
