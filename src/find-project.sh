@@ -49,15 +49,21 @@ addResult()
 # @return string
 getProjectsPath()
 {
-    otherOptions="$(grep -F -m 1 'CONFIG_PATH =' ${PHPSTORM_SCRIPT})"
-    otherOptions="${otherOptions#*\'}"
-    otherOptions="${otherOptions%\'*}"
-    otherOptions="${otherOptions}/options/other.xml"
-    if [ -r ${otherOptions} ]; then
-        escapedHome=`echo $HOME | sed -e 's/[/]/\\\\\//g'`
-        projects=`xmllint --xpath ${XPATH_PROJECTS} ${otherOptions} 2>/dev/null`
+    escapedHome=`echo $HOME | sed -e 's/[/]/\\\\\//g'`
+    basePath="$(grep -F -m 1 'CONFIG_PATH =' ${PHPSTORM_SCRIPT})"
+    basePath="${basePath#*\'}"
+    basePath="${basePath%\'*}"
+    optionsOther="${basePath}/options/other.xml"
+    recentProjectDirectories="${basePath}/options/recentProjectDirectories.xml"
+
+    if [ -r ${recentProjectDirectories} ]; then # v9
+        projects=`xmllint --xpath ${XPATH_RECENT_PROJECTS} ${recentProjectDirectories}`
+        projects=`echo ${projects} | sed -e 's/key=//g' -e 's/value=//g' -e 's/" "/;/g' -e 's/^ *//g' -e 's/ *$//g' -e 's/"//g' -e "s/[$]USER_HOME[$]/${escapedHome}/g"`
+        echo ${projects}
+    elif [ -r ${optionsOther} ]; then #v7 & v8
+        projects=`xmllint --xpath ${XPATH_PROJECTS} ${optionsOther} 2>/dev/null`
         if [[ -z ${projects} ]]; then
-            projects=`xmllint --xpath ${XPATH_RECENT_PROJECTS} ${otherOptions}`
+            projects=`xmllint --xpath ${XPATH_RECENT_PROJECTS} ${optionsOther}`
         fi
         projects=`echo ${projects} | sed -e 's/key=//g' -e 's/value=//g' -e 's/" "/;/g' -e 's/^ *//g' -e 's/ *$//g' -e 's/"//g' -e "s/[$]USER_HOME[$]/${escapedHome}/g"`
         echo ${projects}
