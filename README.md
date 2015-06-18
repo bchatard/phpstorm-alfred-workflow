@@ -29,7 +29,10 @@ If you change command line tools path, you need to update workflow settings:
 ## How to use
 * Open Alfred with your usual hotkey
 * Type keyword `pstorm` followed by your project name
-![phpstorm-alfred-workflow](https://lh3.googleusercontent.com/IkTz0dD5G7s0omIkKHTr-lV9cNDTbyHi3PmiHEjmRDA=w568-h207-p-no)
+![phpstorm-alfred-workflow](https://lh3.googleusercontent.com/Zk8MiGBiZh0hrJ_0YsaINoIdnbeARwi4bcDthcHg_JE=w1335-h420-no)
+
+## Supported versions
+From PhpStorm 7 to PhpStorm 9
 
 ## Credits
 This workflow use [Bash Workflow Handler](https://github.com/markokaestner/bash-workflow-handler)
