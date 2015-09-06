@@ -8,6 +8,8 @@ PHPSTORM_SCRIPT="/usr/local/bin/pstorm"
 # XPath to projects location in other.xml
 XPATH_PROJECTS="//component[@name='RecentDirectoryProjectsManager']/option[@name='names']/map/entry/@key"
 XPATH_RECENT_PROJECTS="//component[@name='RecentDirectoryProjectsManager']/option[@name='recentPaths']/list/option/@value"
+# App Icon
+APP_ICON='fileicon:/Applications/PhpStorm.app'
 # Current nocasematch status
 CURRENT_NOCASEMATCH='off'
 
@@ -103,6 +105,22 @@ restoreNocasematch()
 }
 
 ##
+# Check if PhpStorm app exists
+#  return string if app not found
+#
+# @return string|void
+appExists ()
+{
+    runPath="$(grep -F -m 1 'RUN_PATH =' ${PHPSTORM_SCRIPT})"
+    runPath="${runPath#*\'}"
+    runPath="${runPath%\'*}"
+    runPath="${runPath}/Contents/MacOS/phpstorm"
+    if [[ ! -f "${runPath}" ]]; then
+        echo "${runPath}"
+    fi
+}
+
+##
 # Entry point
 #  return XML string for Alfred
 #
@@ -112,29 +130,34 @@ findProjects()
     # enable insensitive comparaison
     enableNocasematch
 
-    QUERY="$1"
-    nbProjet=0
-    projectsPath="$(getProjectsPath)"
-    if [[ ! -z "${projectsPath}" ]]; then
-        IFS=';'
-        read -a projectsPath<<<"${projectsPath}"
-        IFS=$''
-        for projectPath in "${projectsPath[@]}"; do
-            projectName=$(extractProjectName ${projectPath})
-            if [ -n "${projectName}" ] && [ "${projectName}" != "" ]; then
-                if [[ ${projectName} == *${QUERY}* ]] || [[ -z "${QUERY}" ]]; then
-                    addResult ${projectName} ${projectPath} ${projectName} ${projectPath} 'fileicon:/Applications/PhpStorm.app' 'yes' ${projectName}
-                    ((nbProjet++))
+    appPath=$(appExists)
+    if [[ -z "${appPath}" ]]; then
+        QUERY="$1"
+        nbProjet=0
+        projectsPath="$(getProjectsPath)"
+        if [[ ! -z "${projectsPath}" ]]; then
+            IFS=';'
+            read -a projectsPath<<<"${projectsPath}"
+            IFS=$''
+            for projectPath in "${projectsPath[@]}"; do
+                projectName=$(extractProjectName ${projectPath})
+                if [ -n "${projectName}" ] && [ "${projectName}" != "" ]; then
+                    if [[ ${projectName} == *${QUERY}* ]] || [[ -z "${QUERY}" ]]; then
+                        addResult ${projectName} ${projectPath} ${projectName} ${projectPath} ${APP_ICON} 'yes' ${projectName}
+                        ((nbProjet++))
+                    fi
                 fi
-            fi
-        done
+            done
 
-        # if there is no project display information
-        if [ ${nbProjet} -eq 0 ]; then
-            addResult 'none' '' "No project match '${QUERY}'" "No project match '${QUERY}'" 'fileicon:/Applications/PhpStorm.app' 'yes' ${QUERY}
+            # if there is no project display information
+            if [ ${nbProjet} -eq 0 ]; then
+                addResult 'none' '' "No project match '${QUERY}'" "No project match '${QUERY}'" ${APP_ICON} 'yes' ${QUERY}
+            fi
+        else
+            addResult 'none' '' "Can't find projects" "check configuration or contact developer" ${APP_ICON} 'yes' ''
         fi
     else
-        addResult 'none' '' "Can't find projects" "check configuration or contact developer" 'fileicon:/Applications/PhpStorm.app' 'yes' ''
+        addResult 'none' '' "Can't find projects" "Not a valid path: ${appPath}" ${APP_ICON} 'yes' ''
     fi
 
     # restore nocasematch value
@@ -143,6 +166,9 @@ findProjects()
     getXMLResults
 }
 
-#getProjectsPath $1 # test
+# tests
+#getProjectsPath $1
+#findProjects $1
+#appExists
 
 IFS=${ORIG_IFS}
