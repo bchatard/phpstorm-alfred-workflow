@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# inlude workflowHandler (https://github.com/markokaestner/bash-workflow-handler)
+# include workflowHandler (https://github.com/markokaestner/bash-workflow-handler)
 . ./lib/workflowHandler.sh
 
 # Path to PhpStorm script
@@ -127,13 +127,13 @@ appExists ()
 # @return string
 findProjects()
 {
-    # enable insensitive comparaison
+    # enable insensitive comparison
     enableNocasematch
 
     appPath=$(appExists)
     if [[ -z "${appPath}" ]]; then
         QUERY="$1"
-        nbProjet=0
+        nbProject=0
         projectsPath="$(getProjectsPath)"
         if [[ ! -z "${projectsPath}" ]]; then
             IFS=';'
@@ -144,13 +144,13 @@ findProjects()
                 if [ -n "${projectName}" ] && [ "${projectName}" != "" ]; then
                     if [[ ${projectName} == *${QUERY}* ]] || [[ -z "${QUERY}" ]]; then
                         addResult ${projectName} ${projectPath} ${projectName} ${projectPath} ${APP_ICON} 'yes' ${projectName}
-                        ((nbProjet++))
+                        ((nbProject++))
                     fi
                 fi
             done
 
             # if there is no project display information
-            if [ ${nbProjet} -eq 0 ]; then
+            if [ ${nbProject} -eq 0 ]; then
                 addResult 'none' '' "No project match '${QUERY}'" "No project match '${QUERY}'" ${APP_ICON} 'yes' ${QUERY}
             fi
         else
