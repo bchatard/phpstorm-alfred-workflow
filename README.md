@@ -32,7 +32,7 @@ If you change command line tools path, you need to update workflow settings:
 ![phpstorm-alfred-workflow](https://lh3.googleusercontent.com/Zk8MiGBiZh0hrJ_0YsaINoIdnbeARwi4bcDthcHg_JE=w1335-h420-no)
 
 ## Supported versions
-From PhpStorm 7 to PhpStorm 9
+From PhpStorm 7 to PhpStorm 10
 
 ## Credits
 This workflow use [Bash Workflow Handler](https://github.com/markokaestner/bash-workflow-handler)
